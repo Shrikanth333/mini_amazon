@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+<head>
+{% block body %}
+<body>
+	{%if session["c_type"]=="buyer"%}
+	<p>list of products to purchase:</p>
+	<p>{{session['username']}}</p>
+
+	{% for product in products %}
+	<ul>
+		<li>{{product["name"]}}</li>
+		<li>{{product["description"]}}</li>
+		<li>{{product["price"]}}</li>
+
+
+	<li><b>sold by</b>:{{product['seller_name']}}</li><br>
+	<form action="/add_cart" method="post">
+		<input type="hidden" name="product_id" value="{{product['_id']}}">
+		<input type="submit" name="submit" value="buy">
+		
+	</form>
+	</ul>
+	{%endfor%}
+	{%else%}
+	{% for prod in prods %}
+	<ul>
+		<li>Product Name:{{prod["name"]}}</li>
+		<li>Product Description:{{prod["description"]}}</li>
+		<li>Product Price:{{prod["price"]}}</li>
+		<form action="/remove_item" method="post">
+		 <input type="hidden" name="prod_id" value="{{prod['_id']}}">
+ 		<input type="submit" name="submit" value="remove">
+		
+	</form>
+	</ul>
+	{%endfor%}
+	{%endif%}
+
+	
+</form>
+
+</body>
+{% endblock body %}
+</head>
+			
+
+			
+

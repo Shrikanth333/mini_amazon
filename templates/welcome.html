@@ -1,0 +1,13 @@
+{%extends 'base.html'%}
+{% block body%}
+<p>welcome{% if session['user'] %}</p>
+ you have logged in as {{session['c_type']}}
+ {% endif %}
+ {% if session['c_type'] == 'seller' %}
+ <p><a href="/add_products">click here</a>to add products</p> 
+ <p><a href="/yourproduct">click here</a>to see the products added by you</p>
+ {%else%}
+  <p><a href="/cart">click here</a>to go to your cart</p>
+ <p><a href="/productslist">click here</a>to go to buy some products</p>
+ {% endif %}
+ {% endblock body %}

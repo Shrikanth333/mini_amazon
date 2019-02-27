@@ -1,0 +1,64 @@
+{% extends 'base.html'%}
+{%block body%}
+<body>
+	<style>
+	/*body{
+		background-color: lightblue;
+	}*/
+	div.a{
+		text-align: center;
+
+	}
+	.center {
+	text-align: center;
+	border: 1px dotted black;
+	width: 50%;
+}
+</style>
+<div class="a">
+
+<h1 class="centre">welcome to my Amazon!</h1>
+{% if session['username'] %}
+<p>{{ session['username'] }}</p>
+{% else %}
+<p>guest user</p>
+{% endif %}
+<h2>This has built by me , shrikanth N</h2>
+
+<p>As a part of my project at the Valley Bootcamp</p>
+
+
+
+{%if not session['username']%}
+
+
+
+<strong> signin </strong>
+<p></p>
+<form action="/login" method="post" id="form1">
+   Username:<input type="text" name="username"><br>
+   <p> </p>
+    Password:<input type="password" name="password">
+    {% block content %}
+    <div class="container">
+    	{% for message in get_flashed_messages()%}
+    	<div class="alert aler-warning">
+    		<button type="button" class="close" data-dismiss>&times;</button>
+    		{{message}}
+    	</div>
+    	{% endfor %}
+    	{% block page_content %}{% endblock %}
+    </div>
+    	{% endblock%}
+<p> </p>
+<button type="submit" form="form1" value="submit">submit</button></form>
+<br>
+<br>
+<a href="/register">Register</a>
+{%else%}
+
+<a href="/logout">Log out</a>
+{%endif%}
+{%endblock body%}
+</div>
+</body>
