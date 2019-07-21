@@ -2,7 +2,7 @@ from flask import Flask, request,render_template,redirect,url_for,session,flash,
 from wtforms import Form,StringField,PasswordField,TextAreaField,RadioField,validators
 from wtforms.fields.html5 import EmailField
 from passlib.hash import sha256_crypt
-from models.user_model import remove_from_cart,product_deletion,user_signup,search_user_by_username,Product_addition,check_user,seller_products,buyer_products,cart_details,update_cart_details,search_products_in_page,buy_product
+from models.user_model import remove_from_cart,product_deletion,user_signup,search_user_by_username,Product_addition,check_user,seller_products,buyer_products,cart_details,update_cart_details,search_products_in_page,buy_product,carter_products
 
 app = Flask(__name__)
 
@@ -183,7 +183,8 @@ def products():
 			result = seller_products(session["user_id"])
 		else:
 			result = buyer_products()
-		return render_template("products.html" ,result=result[0],isproducts=result[1])
+			carter= carter_products(session["user_id"])
+		return render_template("products.html" ,result=result[0],isproducts=result[1],carter=carter)
 
 
 @app.route("/searchproducts", methods=["POST"])
@@ -222,6 +223,9 @@ def add_to_cart():
 	session["order_total"]=update_cart_details(session["user_id"],product_id,quantity,price)
 	flash('Product has been added to cart','success')
 	return redirect(url_for("cart_page"))
+
+# @app.route('/add_to_cart', methods=['POST'])
+# def go_to_cart():
 
 @app.route("/remove_from_cart",methods=['POST'])
 

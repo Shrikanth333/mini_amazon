@@ -25,28 +25,74 @@
 </form>
 	{% endif %}
 {% endif %}
+
+
+{% if carter %}
+{% for test in carter %}
+	<ul class="list-group">
+	<b><li class="list-group-item"> index :{{ test["quantity"] }}</li></b>
+	<li class="list-group-item"><b>email:</b> {{ test["price"] }}<br><br>
+	<b>id :</b> {{ test["product_id"] }}<br><br>
+	<b>name :</b> {{ test["name"] }}<br><br>
+	</li></ul>
+{% endfor %}
+{% endif %}
+
 {% if result %}
 {% for dict in result %}
+	
 <br>
 	<ul class="list-group">
 	<b><li class="list-group-item"> Product :{{ dict["product name"] }}</li></b>
 	<li class="list-group-item"><b>Price:</b> {{ dict["price"] }}<br><br>
+	<b>Description :</b> {{ dict["_id"] }}<br><br>
 	<b>Description :</b> {{ dict["description"] }}<br><br>
 	<b>Seller Name :</b> {{ dict["username"] }}<br><br>
+		
 		{% if session['account_type']=="buyer" %}
-		<form action="/add_to_cart" method="POST">
-		<input name="product_id" type="hidden" value="{{dict['_id']}}">
-		<input type="hidden" name="price" value="{{dict['price']}}">
-		<input type="number" name="quantity" min="1" max="10" value="1">		
-		<input type=submit value="Add to cart"> <br>	
-		</form>
-		{% else%}
+		{% for test in carter %}
+	 		{% if test.product_id|string() == dict._id|string() %}
+			
+			<b>cart_id :</b> {{ test["product_id"] }}<br><br>
+			<b>poduct_id :</b> {{ dict["_id"] }}<br><br>
+			<form action="/cart_page" method="POST">
+			<button type="submit" class="btn btn-primary"  method ="POST">Cart Page </button><br>
+			<br></form>
+			{% endif %}
+		{% endfor %}
+
+	
+
+
+		{% for test in carter %}
+			{% if  not test or test.product_id|string() != dict._id|string() %} 
+			<b>cart_id :</b> {{ test["product_id"] }}<br><br>
+			<b>poduct_id :</b> {{ dict["_id"] }}<br><br>
+
+
+			<form action="/add_to_cart" method="POST">
+			<input name="product_id" type="hidden" value="{{dict['_id']}}">
+			<input type="hidden" name="price" value="{{dict['price']}}">
+			<input type="number" name="quantity" min="1" max="10" value="1">		
+			<input type=submit value="Add to cart"> <br>	
+			</form>
+		
+			{% endif %} 
+		{% endfor %}
+
+
+
+			
+
+				
+		{% else %}
 		<form action="/remove" method="POST">
 			<input name="product_id" type="hidden" value="{{dict['_id']}}">
 			<input type="submit" name="product_id" value="Remove Product">
 		</form>
-		{% endif %}
+	{% endif %}
 	</ul>
+	
 {% endfor %}
 {% endif %}
 {% if session['account_type']=="buyer" %}

@@ -81,6 +81,11 @@ def buyer_products():
 
 		return(ans, 'yes')
 
+def carter_products(user_id):
+	user_info = db["users"].find_one({"_id":ObjectId(user_id)})
+	cart_dict = user_info.get("cart")
+	return cart_dict
+
 	
 def cart_details(user_id):
 	results =[]
@@ -115,7 +120,7 @@ def update_cart_details(user_id,product_id,quantity,price):
 	cart_dict = user_info.get("cart")
 	product_index = None
 	total = 0
-	
+	index=1
 		
 	for dict1 in cart_dict:
 
@@ -126,13 +131,16 @@ def update_cart_details(user_id,product_id,quantity,price):
 	if bool(product_index) == True:
 
 
-		db["users"].update({"_id" : ObjectId(user_id),"cart.product_id":product_id},{ '$inc':{ 'cart.$.quantity':quantity}})
-		
+		db["users"].update({"_id" :ObjectId(user_id),"cart.product_id":product_id},{ '$inc':{ 'cart.$.quantity':quantity}})
+		# return bool(product_index)
 
 	else:
 
-		db["users"].update({"_id":ObjectId(user_id)},{"$addToSet":{"cart":{"$each":[{"product_id":product_id,"quantity":quantity,"price":price }]}}})
+		
+		db["users"].update({"_id":ObjectId(user_id)},{"$addToSet":{"cart":{"$each":[{"product_id":product_id,"quantity":quantity,"price":price}]}}})
+		#db["products"].update({"_id":ObjectId(pro_id)},{"$Set":{"index":index}})
 	
+
 	user_info = db["users"].find_one({"_id":ObjectId(user_id)})	
 	cart_dict = user_info.get("cart")
 
